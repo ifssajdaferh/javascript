@@ -52,6 +52,71 @@
           }
         }  
         console.log(zxy.__proto__.constructor);
+
+
+//         原型链
+// 每个对象都有原型__proto__属性 不断地向上指向原型对象prototype. zxy-->star-->object-->null 直至最高层级object
+
+//   成员查找规则
+// 比如有一个成员为sing 从对象实例本身开始查找，没有以此寻找父级，直至找到sing这个成员。
+// 如果sing成员重复 比如这里边的ldh对象实例有sing方法 star原型对象也有，那么采用就近原则！
+
+
+
+                        //  内置对象的扩展,注意此处只能采取.的追加形式，如果使用=赋值 就会将原本的array.prototype里的内容方法覆盖！
+                        Array.prototype.sum=function() {
+                            var a=0;
+                        //    构造函数的this指向实例对象 在这里就是this指向数组 sum的调用者，所以不用什么augements作为形参那个思路
+                              for(i=0;i<this.length;i++){
+                               a+=this[i];
+                              }
+                              return a;
+                        }
+
+                        var b=new Array(1,2,3,4);
+                        console.log(b.sum());
+
+                                //   call
+                        function fn(num1,num2){
+                            console.log(this);
+                            return num1+num2
+
+                        }
+                        function fno(){
+
+                        }
+                        
+                        console.log(fn(2,3));
+                        //window
+                        //5
+                        console.log( fn.call(fno,2,3));
+                       //o
+                       //5
+
+
+                    // 继承
+                    // 父构造函数
+                    function father(uname,uage) {
+                          this.name=uname;
+                          this.age=uage;
+                          this.sing=function() {
+                              console.log('唱了一首天上掉下来个猪八戒~~')
+                          }
+                    }
+
+                    //字构造函数 但两者其实没有什么关系，son的对象实例更不可能调用father构造函数的内容
+                    function son(uname,uage) {
+                        
+                        // 关键一步 就是使用call将father的指向变为son的this，跟son保持一致，这样即使是通过son创建的对象实例也可以调用father的东西
+                        father.call(this,uname,uage);
+                           
+                    }
+                      var son1=new son('刘德华',19);
+                      console.log(son1);
+                    //   console.log(son1.sing());
+
+                    // 可以看到constructor: ƒ son(uanme,uage)  本质上父级还是son，但是继承了father构造函数的内容。
+                        
     </script>
 </body>
 </html>
