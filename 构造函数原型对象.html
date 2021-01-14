@@ -9,7 +9,49 @@
     
 
     <script>
-        // 在es6之前的版本 javascript要想使用面向对象 ，就必须使用构造函数
+        // 在es6之前的版本 javascript要想使用面向对象 ，就必须使用构造函数.构造函数对应着实例对象。里面的成员分为两种 一种是实例成员-即this
+        // 声明的 只能通过生成的实例对象进行调用 因为this关键字指向的就是实例对象，另外一种则是静态成员，是专属构造函数的。
+        // 自定义构造函数的意义即大量生成有着共同的方法属性的对象
+
+        // 构造函数star
+        function star(uname,uage) {
+            this.name=uname;
+            this.age=uage;
+
+        }
+        // 由于function属于复杂数据类型，这就意味着每次构造函数生成一个实例对象就会另辟一块内存空间，多个实例对象如果是有同一个方法，那这样就会造成内存浪费的问题。
+        // 此时 便可通过原型 ：实例对象的  __proto__ 属性 和它指向的构造函数的原型对象prototype解决这一问题。所以对象实例的原型和构造函数的原型对象简单来说就是解
+        // 决了内存浪费问题
+
+        // prototype属于构造函数的默认属性，在函数外进行操作
+        // 在此 给他一个函数
+        star.prototype.sing=function() {
+            console.log("所有歌手都会唱歌！");
+        }
+
+        // 构造函数end
+
+
+        // 接下来生成实例对象 通过new的方式 对象在javascript大概有三种方式 一种是对象字面量 var obj={...}。一种是new object() 第三种则是自定义构造函数
+        var zxy=new star('张学友',18);
+         console.log(zxy.name);
+         zxy.sing();  
+        //  这句话的寻找路径 即 先去找zxy对象本身是否有sing方法，没有就去__proto__这个原型指向的构造函数的原型对象prototype身上去找
+                                      
+
+                        //  constructor属性：不管是原型还是原型对象都有着这一个属性，用来记录当前对象/构造函数指向的是哪一个构造函数，即那个构造函数创造的这个对象
+        console.log(zxy.__proto__.constructor);
+        console.log(star.prototype.constructor);
+           
+        // 像这里因为是=号 重写了__proto__原型 所以就会覆盖原有内容，constructor指向的构造函数记录也没了，这时候需要手动添加回去
+        // @在实际开发中也不清楚有没有需要重写原型或者原型对象的应用场景，但只需要记住 constructor属性别忘了添加回去
+        zxy.__proto__={
+            // constructor:star,
+          movie:function() {
+              console.log('我会演电影');
+          }
+        }  
+        console.log(zxy.__proto__.constructor);
     </script>
 </body>
 </html>
